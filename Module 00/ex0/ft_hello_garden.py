@@ -1,23 +1,14 @@
 # ************************************************************************* #
 #                                                                           #
 #                                                         :::      :::::::: #
-#    ft_count_harvest_recursive.py                      :+:      :+:    :+: #
+#    ft_hello_garden.py                                 :+:      :+:    :+: #
 #                                                     +:+ +:+         +:+   #
 #    By: bpavlows <bpavlows@student.42porto.com>    +#+  +:+       +#+      #
 #                                                 +#+#+#+#+#+   +#+         #
-#    Created: 2026/02/21 11:48:47 by bpavlows          #+#    #+#           #
-#    Updated: 2026/02/21 11:49:10 by bpavlows         ###   ########.fr     #
+#    Created: 2026/02/21 10:13:06 by bpavlows          #+#    #+#           #
+#    Updated: 2026/02/21 10:23:32 by bpavlows         ###   ########.fr     #
 #                                                                           #
 # ************************************************************************* #
 
-def helper(cont, day):
-    if (cont > day):
-        print("Harvest time!")
-        return
-    print(f"Day {cont}")
-    helper(cont + 1, day)
-
-
-def ft_count_harvest_recursive():
-    day = int(input('Days until harvest: '))
-    helper(1, day)
+def ft_hello_garden():
+    print("Hello, Garden Community!")

@@ -1,23 +1,18 @@
 # ************************************************************************* #
 #                                                                           #
 #                                                         :::      :::::::: #
-#    ft_count_harvest_recursive.py                      :+:      :+:    :+: #
+#    ft_water_reminder.py                               :+:      :+:    :+: #
 #                                                     +:+ +:+         +:+   #
 #    By: bpavlows <bpavlows@student.42porto.com>    +#+  +:+       +#+      #
 #                                                 +#+#+#+#+#+   +#+         #
-#    Created: 2026/02/21 11:48:47 by bpavlows          #+#    #+#           #
-#    Updated: 2026/02/21 11:49:10 by bpavlows         ###   ########.fr     #
+#    Created: 2026/02/21 11:19:54 by bpavlows          #+#    #+#           #
+#    Updated: 2026/02/21 11:22:46 by bpavlows         ###   ########.fr     #
 #                                                                           #
 # ************************************************************************* #
 
-def helper(cont, day):
-    if (cont > day):
-        print("Harvest time!")
-        return
-    print(f"Day {cont}")
-    helper(cont + 1, day)
-
-
-def ft_count_harvest_recursive():
-    day = int(input('Days until harvest: '))
-    helper(1, day)
+def ft_water_reminder():
+    day = int(input('Days since last watering: '))
+    if (day > 2):
+        print("Water the plants!")
+    else:
+        print("Plants are fine")
