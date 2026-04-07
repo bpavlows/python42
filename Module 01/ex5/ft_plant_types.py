@@ -101,5 +101,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-# Precisa ver a tal dica de tipo : int etc e o retorno de cada funcao. Ver tb a questao do show() se coloca ou nao na plant()

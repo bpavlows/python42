@@ -9,7 +9,7 @@ class Plant:
     def show(self) -> None:
         message: str = (
             f"Created: {self.name}: "
-            f"{self.height}cm, {self.plant_age} days old"
+            f"{self.height:,.1f}cm, {self.plant_age} days old"
         )
         print(message)
 

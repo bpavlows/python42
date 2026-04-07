@@ -18,20 +18,19 @@ class Plant:
 
 def main() -> None:
     p1 = Plant("Rose", 25, 30)
-    # p2 = Plant("Sunflower", 80, 45)
-    # p3 = Plant("Cactus", 15, 120)
 
     print("=== Garden Plant Growth ===")
+    p1.show()
     x = range(1, 8, 1)
     initial_h = p1.height
 
     for i in x:
         print(f"=== Day {i} ===")
-        p1.show()
         p1.grow()
         p1.age()
+        p1.show()
 
-    week = round(p1.height - initial_h)
+    week = round(p1.height - initial_h, 2)
     print(f"Growth this week: {week}cm")
 
 
