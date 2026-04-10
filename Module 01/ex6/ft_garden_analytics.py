@@ -6,6 +6,7 @@ class Plant:
             self._grow_count: int = 0
             self._age_count: int = 0
             self._show_count: int = 0
+            self._shade_count: int | None = None
 
         def display(self) -> None:
             print(
@@ -13,7 +14,7 @@ class Plant:
                 f"{self._age_count} age, "
                 f"{self._show_count} show."
             )
-            if hasattr(self, "_shade_count"):
+            if self._shade_count is not None:
                 print(f" {self._shade_count} shade")
 
     def __init__(self, name: str, height: float, age: int) -> None:
@@ -58,7 +59,7 @@ class Flower(Plant):
     def bloom(self) -> None:
         self._bloomed = True
 
-    def grow(self, num: int) -> None:
+    def grow(self, num: float) -> None:
         self._stats._grow_count += 1
         self.height += num
 
@@ -104,7 +105,8 @@ class Tree(Plant):
             f"Tree {self.name} now produces a shade of {self.height}"
             f"cm long and {self.trunk_diameter}cm wide."
         )
-        self._stats._shade_count += 1
+        if self._stats._shade_count is not None:
+            self._stats._shade_count += 1
 
 
 def display_plant_stats(plant: Plant) -> None:

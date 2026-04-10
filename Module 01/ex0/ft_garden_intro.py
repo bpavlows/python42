@@ -2,8 +2,8 @@
 
 def main() -> None:
     plant_name: str = "Rose"
-    plant_height: int = "25"
-    plant_age: int = "30"
+    plant_height: int = 25
+    plant_age: int = 30
 
     print("=== Welcome to My Garden ===")
     print(f"Plant: {plant_name}")
