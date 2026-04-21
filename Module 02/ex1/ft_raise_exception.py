@@ -19,7 +19,7 @@ def test_temperature(var: str) -> None:
 
 
 def main() -> None:
-    print("=== Garden Temperature ===")
+    print("=== Garden Temperature Checker ===")
     print()
     test_temperature("25")
     print()
