@@ -2,11 +2,11 @@
 
 def input_temperature(temp_str: str) -> int:
     temp = int(temp_str)
-    if (temp < 0):
+    if temp < 0:
         raise ValueError(f"{temp}°C is too cold for plants (min 0°C)")
-    if (temp > 40):
+    if temp > 40:
         raise ValueError(f"{temp}°C is too hot for plants (max 40°C)")
-    return (temp)
+    return temp
 
 
 def test_temperature(var: str) -> None:
