@@ -2,21 +2,26 @@
 import math
 
 
-def get_player_pos() -> None:
+def calculate_distance(point_a, point_b) -> float:
+    dx = point_b[0] - point_a[0]
+    dy = point_b[1] - point_a[1]
+    dz = point_b[2] - point_a[2]
+    return math.sqrt(dx**2 + dy**2 + dz**2)
+
+
+def get_player_pos() -> tuple:
     while True:
-        inp1 = input("Enter new coordinates as floats in format 'x,y,z': ")
+        line = input("Enter new coordinates as floats in format 'x,y,z': ")
         try:
-            inp = inp1.split(',')
-            if len(inp) != 3:
+            parts = line.split(',')
+            if len(parts) != 3:
                 print("Invalid syntax")
                 continue
-            x = float(inp[0].strip())
-            y = float(inp[1].strip())
-            z = float(inp[2].strip())
-            return(x, y, z)
+            coords = [float(p.strip()) for p in parts]
+            return tuple(coords)
         except ValueError as e:
-            wrong = str(e).split("'")
-            print(f"Error on parameter '{wrong[1]}': {e}")
+            err_msg = str(e).split(':')[-1].strip()
+            print(f"Error on parameter {err_msg}: {e}")
 
 
 def main() -> None:
@@ -26,13 +31,13 @@ def main() -> None:
     p1 = get_player_pos()
     print(f"Got a first tuple: {p1}")
     print(f"It includes: X={p1[0]}, Y={p1[1]}, Z={p1[2]}")
-    distance = math.sqrt(p1[0]**2 + p1[1]**2 + p1[2]**2)
-    print(f"Distance to center: {distance:,.5}")
+    dist_center = calculate_distance(p1, (0.0, 0.0, 0.0))
+    print(f"Distance to center: {dist_center:.4f}")
     print()
     print("Get a second set of coordinates")
     p2 = get_player_pos()
-    distance2 = ((p2[0] - p1[0])**2 + (p2[1] - p1[1])**2 + (p2[2] - p1[2])**2)
-    print(f"Distance between the 2 sets of coordinates: {distance2}")
+    dist_between = calculate_distance(p1, p2)
+    print(f"Distance between the 2 sets of coordinates: {dist_between:.4f}")
 
 
 if __name__ == "__main__":
