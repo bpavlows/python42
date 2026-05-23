@@ -11,61 +11,130 @@ class DataProcessor(ABC):
     @abstractmethod
     def validate(self, data: Any) -> bool:
         pass
-        print("which will check whether the input data are appropriate for the current data processor")
-        print(" This method returns a bool that indicates if the provided data can be ingested by this data processor.")
 
     @abstractmethod
     def ingest(self, data: Any) -> None:
-        print("which will process the input data")
-        print(
-            " The overriding methods in the specialized classes will have"
-            "their own specific signatures to match the types they expect. In case the user"
-            "does not validate the data before calling ingest, and provides invalid data, an"
-            "exception must be raised."
-        )
+        pass
 
     def output(self) -> tuple[int, str]:
-        print("which will output ingested data")
-        print(" There is no need to override it in the specialized classes")
+        if not self._queue:
+            raise IndexError("No data available")
+        return self._queue.pop(0)
+
+    def _save(self, value: str) -> None:
+        self._queue.append((self._rank, value))
+        self._rank += 1
 
 
 class NumericProcessor(DataProcessor):
-    print(
-        " The NumericProcessor ingests int, float, and lists of both types (including"
-        "mixed-type lists). It then converts the data into strings and stores it internally,"
-        "waiting to be extracted using the output method. The overriding ingest method"
-        "signature must reflect the accepted types."
-    )
+    def validate(self, data: Any) -> bool:
+        if isinstance(data, (int, float)):
+            return True
+        if isinstance(data, list):
+            return all(isinstance(item, (int, float)) for item in data)
+        return False
+
+    def ingest(self, data: int | float | list[int | float]) -> None:
+        if not self.validate(data):
+            raise ValueError("Improper numeric data")
+        if isinstance(data, list):
+            for item in data:
+                self._save(str(item))
+            return
+        self._save(str(data))
 
 
 class TextProcessor(DataProcessor):
-    print(
-        " The TextProcessor ingests str and lists of strings. It stores the data internally,"
-        "waiting to be extracted using the output method. The overriding ingest method"
-        "signature must reflect the accepted types."
-    )
+    def validate(self, data: Any) -> bool:
+        if isinstance(data, str):
+            return True
+        if isinstance(data, list):
+            return all(isinstance(item, str) for item in data)
+        return False
+
+    def ingest(self, data: str | list[str]) -> None:
+        if not self.validate(data):
+            raise ValueError("Improper text data")
+        if isinstance(data, list):
+            for item in data:
+                self._save(item)
+            return
+        self._save(data)
 
 
 class LogProcessor(DataProcessor):
-    print(
-        " The LogProcessor ingests a dict of string key-value pairs, and lists of that type. It"
-        "then converts the data into strings and stores it internally, waiting to be extracted"
-        "using the output method. The overriding ingest method signature must reflect"
-        "the accepted types."
-    )
+    def validate(self, data: Any) -> bool:
+        if isinstance(data, dict):
+            return all(
+                isinstance(key, str) and isinstance(value, str)
+                for key, value in data.items()
+            )
+        if isinstance(data, list):
+            return all(self.validate(item) for item in data)
+        return False
+
+    def ingest(self, data: dict[str, str] | list[dict[str, str]]) -> None:
+        if not self.validate(data):
+            raise ValueError("Improper log data")
+        if isinstance(data, list):
+            for item in data:
+                self._save(self._format_log(item))
+            return
+        self._save(self._format_log(data))
+
+    @staticmethod
+    def _format_log(entry: dict[str, str]) -> str:
+        if "log_level" in entry and "log_message" in entry:
+            return f"{entry['log_level']}: {entry['log_message']}"
+        return ", ".join(f"{key}: {value}" for key, value in entry.items())
 
 
 def main() -> None:
-    print(
-        "The output method will extract the oldest piece of data stored internally in the"
-"data processor, along with the associated processing rank within the data processor."
-"The piece of data is then removed from the data processor."
-    )
-    print(
-        "• Create instances for each specialized class."
-        "• Test valid and invalid data for each class through the validate method."
-        "• Test at least one invalid data item with the ingest method without prior validation,"
-        "and check that it raises an exception. This will leave you with a mypy warning, on"
-        "purpose."
-        "• Ingest various data for each data processor and then extract it using output"
-    )
+    print("=== Code Nexus - Data Processor ===")
+    print()
+
+    numeric = NumericProcessor()
+    text = TextProcessor()
+    log = LogProcessor()
+
+    print("Testing Numeric Processor...")
+    print(f"Trying to validate input '42': {numeric.validate(42)}")
+    print(f"Trying to validate input 'Hello': {numeric.validate('Hello')}")
+    print("Test invalid ingestion of string 'foo' without prior validation:")
+    try:
+        numeric.ingest("foo")
+    except ValueError as exc:
+        print(f"Got exception: {exc}")
+    print("Processing data: [1, 2, 3, 4, 5]")
+    numeric.ingest([1, 2, 3, 4, 5])
+    print("Extracting 3 values...")
+    for _ in range(3):
+        rank, value = numeric.output()
+        print(f"Numeric value {rank}: {value}")
+    print()
+
+    print("Testing Text Processor...")
+    print(f"Trying to validate input '42': {text.validate(42)}")
+    print("Processing data: ['Hello', 'Nexus', 'World']")
+    text.ingest(["Hello", "Nexus", "World"])
+    print("Extracting 1 value...")
+    rank, value = text.output()
+    print(f"Text value {rank}: {value}")
+    print()
+
+    print("Testing Log Processor...")
+    print(f"Trying to validate input 'Hello': {log.validate('Hello')}")
+    log_data: list[dict[str, str]] = [
+        {"log_level": "NOTICE", "log_message": "Connection to server"},
+        {"log_level": "ERROR", "log_message": "Unauthorized access!!"},
+    ]
+    print(f"Processing data: {log_data}")
+    log.ingest(log_data)
+    print("Extracting 2 values...")
+    for _ in range(2):
+        rank, value = log.output()
+        print(f"Log entry {rank}: {value}")
+
+
+if __name__ == "__main__":
+    main()
