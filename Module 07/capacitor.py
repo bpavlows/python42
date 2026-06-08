@@ -1,8 +1,8 @@
 from ex1 import HealingCreatureFactory, TransformCreatureFactory
-from ex1 import HealCapability, TransformCapability
+from ex1.capabilities import HealCapability, TransformCapability
 
 
-def main() -> None:
+def test_healing_factory(factory: HealingCreatureFactory) -> None:
     print("Testing Creature with healing capability")
 
     print(" base:")
@@ -21,29 +21,35 @@ def main() -> None:
         print(evolved.heal())
     print()
 
+
+def test_transform_factory(factory: TransformCreatureFactory) -> None:
     print("Testing Creature with transform capability")
 
     print(" base:")
-    factory2 = TransformCreatureFactory()
-    base2 = factory2.create_base()
-    print(base2.describe())
-    print(base2.attack())
-    if isinstance(base2, TransformCapability):
-        print(base2.transform())
-    print(base2.attack())
-    if isinstance(base2, TransformCapability):
-        print(base2.revert())
+    base = factory.create_base()
+    print(base.describe())
+    print(base.attack())
+    if isinstance(base, TransformCapability):
+        print(base.transform())
+    print(base.attack())
+    if isinstance(base, TransformCapability):
+        print(base.revert())
 
     print(" evolved:")
-    evolved2 = factory2.create_evolved()
-    print(evolved2.describe())
-    print(evolved2.attack())
-    if isinstance(evolved2, TransformCapability):
-        print(evolved2.transform())
-    print(evolved2.attack())
-    if isinstance(evolved2, TransformCapability):
-        print(evolved2.revert())
+    evolved = factory.create_evolved()
+    print(evolved.describe())
+    print(evolved.attack())
+    if isinstance(evolved, TransformCapability):
+        print(evolved.transform())
+    print(evolved.attack())
+    if isinstance(evolved, TransformCapability):
+        print(evolved.revert())
     print()
+
+
+def main() -> None:
+    test_healing_factory(HealingCreatureFactory())
+    test_transform_factory(TransformCreatureFactory())
 
 
 if __name__ == "__main__":
