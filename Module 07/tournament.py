@@ -4,10 +4,10 @@ from ex1 import HealingCreatureFactory, TransformCreatureFactory
 from ex2 import AggressiveStrategy, DefensiveStrategy, NormalStrategy
 from ex2.strategies import BattleStrategy, InvalidStrategyError
 
-Opponent = tuple[CreatureFactory, BattleStrategy]
 
-
-def run_tournament(opponents: list[Opponent]) -> None:
+def run_tournament(
+        opponents: list[tuple[CreatureFactory, BattleStrategy]]
+        ) -> None:
     print("*** Tournament ***")
     print(f"{len(opponents)} opponents involved")
     creatures = [
@@ -60,4 +60,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
