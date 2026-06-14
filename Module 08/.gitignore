@@ -1,0 +1,4 @@
+.mypycache/
+__pycache__/
+matrix_env/
+.env
